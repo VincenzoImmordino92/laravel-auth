@@ -10,6 +10,15 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $fillable =[
+        'title',
+        'slug',
+        'start_date',
+        'end_date',
+        'description',
+        'url',
+    ];
+
     public static function generateSlug($string){
 
         $slug =  Str::slug($string, '-');
