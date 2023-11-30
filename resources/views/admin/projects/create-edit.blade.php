@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h1>Nome Progetto:</h1>
+    <h1>{{ $title }}</h1>
 
 
     {{-- $errors->any() restituisce true se almeno un errore è presente nel form --}}
@@ -15,11 +15,11 @@
 
     <div class="row">
         <div class="col-6">
-            <form  action="{{route('admin.projects.store')}}" method="POST">
+            <form  action="{{ $route }}" method="POST">
             @csrf
-
+            @method( $method)
             <div class="my-2">
-                <label for="title" class="form-label">Nome Progetto</label>
+                <label for="title" class="form-label">Nome Progetto *</label>
                 <input
                         type="text"
                         class="form-control
@@ -28,7 +28,7 @@
                         @enderror"
                         id="title"
                         name="title"
-                        value="{{old('title')}}">
+                        value="{{old('title', $project?->title)}}">
 
                 @error('title')
                     <p class="text-danger">{{$message}}</p>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="my-2">
-                <label for="start_date" class="form-label">Data di Inizio</label>
+                <label for="start_date" class="form-label">Data di Inizio *</label>
                 <input
                         type="date"
                         class="form-control
@@ -45,7 +45,7 @@
                         @enderror"
                         id="start_date"
                         name="start_date"
-                        value="{{old('start_date')}}">
+                        value="{{old('start_date', $project?->start_date)}}">
 
                 @error('start_date')
                     <p class="text-danger">{{$message}}</p>
@@ -62,15 +62,15 @@
                         @enderror"
                         id="end_date"
                         name="end_date"
-                        value="{{old('end_date')}}">
+                        value="{{old('end_date',$project?->end_date)}}">
 
-                @error('ed_date')
+                @error('end_date')
                     <p class="text-danger">{{$message}}</p>
                 @enderror
             </div>
 
             <div class="my-2">
-                <label for="description" class="form-label">Descrizione</label>
+                <label for="description" class="form-label">Descrizione *</label>
                 <textarea
                         rows="4" cols="50"
                         class="form-control
@@ -78,8 +78,7 @@
                         is-invalid
                         @enderror"
                         id="description"
-                        name="description"
-                        value="{{old('description')}}"></textarea>
+                        name="description">{{old('description',$project?->description)}}</textarea>
 
                 @error('description')
                     <p class="text-danger">{{$message}}</p>
@@ -87,7 +86,7 @@
             </div>
 
             <div class="my-2">
-                <label for="url" class="form-label">Link/URL</label>
+                <label for="url" class="form-label">Link/URL *</label>
                 <input
                         type="text"
                         class="form-control
@@ -96,7 +95,7 @@
                         @enderror"
                         id="url"
                         name="url"
-                        value="{{old('url')}}">
+                        value="{{old('url',$project?->description)}}">
 
                 @error('url')
                     <p class="text-danger">{{$message}}</p>

@@ -23,8 +23,8 @@ class ProjectRequest extends FormRequest
     {
         return [
             'title' => 'required|min:3|max:255',
-            'start_date' => 'required',
-            'end_date' => 'required',
+            'start_date' => 'required|date',
+            /* 'end_date' => 'date', */
             'description' => 'required|min:3',
             'url' => 'required|min:3|max:255',
         ];
@@ -34,11 +34,14 @@ class ProjectRequest extends FormRequest
     //{
     //    return [
     //        /* fare tutto sto discorso dei commenti di errore per tutti //i miei dati da inserire  */
-    //        'title.required' => 'Devi inserire il nome del fumetto',
-    //        'title.min' => 'Il nome del  deve avere :min //caratteri',
-    //        'title.max' => 'Il nome del  deve avere :max //caratteri',
-    //        'description.required' => 'Devi inserire la descrizione del ',
-    //        'description.min' => 'La descrizione del fumetto deve avere //:min caratteri',
+    //        'title.required' => 'Devi inserire il nome del progetto',
+    //        'title.min' => 'Il nome del progetto deve avere :min //caratteri',
+    //        'title.max' => 'Il nome del progetto deve avere :max //caratteri',
+    //        'start_date.required' => 'Inserisci la data di inizio',
+    //        'description.required' => 'Devi inserire la descrizione del progetto',
+    //        'description.min' => 'La descrizione del progetto deve avere //:min caratteri',
+    //        'url.required' => 'Inserisci la URL del progetto',
+    //        'url.min' => 'L'URL del progetto deve avere //:min caratteri',
     //    ];
     //}
 }

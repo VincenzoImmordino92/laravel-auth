@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use App\Functions\Helper;
+
 
 class TypeController extends Controller
 {
@@ -37,7 +39,16 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $exixts = Type::where('name', $request->name)->first();
+        if($exixts){
+            return redirect()->route('admin.technologies.index')->with('error','Tipo di progetto gia presente');
+        }else{
+            $new_type = new Type();
+            $new_type->name = $request->name;
+            $new_type->slug = Helper::generateSlug($request->name,Type::class);
+            $new_type->save();
+            return redirect()->route('admin.types.index')->with('success','Tipo di progetto salvata con successo');
+        }
     }
 
     /**
@@ -69,9 +80,27 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Type $type)
     {
-        //
+        $val_data = $request->validate([
+            'name' => 'required|min:2|max:100'
+        ],
+        [
+            'name.required' => 'Devi inserire il nome del tipo di progetto',
+            'name.min' => 'Il nome del tipo di progetto deve essere minimo 2 caratteri',
+            'name.max' => 'Il nome del tipo di progetto deve essere massimo 100 caratteri'
+        ]);
+
+        $exixts = Type::where('name', $request->name)->first();
+        if($exixts){
+            return redirect()->route('admin.types.index')->with('error','Tecnologia già presente');
+        }
+
+
+            $val_data['slug'] = Helper::generateSlug($request->name, Type::class);
+            $type->update($val_data);
+
+            return redirect()->route('admin.types.index')->with('success','Tecnologia aggiornata correttamente');
     }
 
     /**
@@ -80,8 +109,9 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Type $type)
     {
-        //
+        $type->delete();
+        return redirect()->route('admin.types.index')->with('success','Tecnologia eliminata con successo');
     }
 }
