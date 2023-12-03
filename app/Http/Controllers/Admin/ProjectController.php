@@ -7,7 +7,7 @@ use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Functions\Helper;
-
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -49,6 +49,14 @@ class ProjectController extends Controller
         $form_data_project['slug'] = Helper::generateSlug($form_data_project['title'],Project::class);
      /*    $form_data_project['start_date'] = date('Y-m-d');
         $form_data_project['end_date'] = date('Y-m-d'); */
+
+        //se esiste la chiave image salvo l'immagine nel file system e nel database
+        if(array_key_exists('image',$form_data_project)){
+            //prima di salvare il file prendo il nome del file per salvarlo nel db
+            $form_data_project['image_original_name'] = $request->file('image')->getClientOriginalName();
+            //salvo il file nello storage rinominandolo
+            $form_data_project['image']  = Storage::put('uploads',$form_data_project['image']);
+        }
 
         $new_project= Project::create($form_data_project);
         return redirect()->route('admin.projects.show', $new_project);
@@ -109,6 +117,17 @@ class ProjectController extends Controller
             $form_modifica_data['slug'] = $project->slug;
         }
 
+        if(array_key_exists('image',$form_modifica_data)){
+        // se esiste la chiave image svuol dire che devo sostituire l'immagine presente (se c'è) eliminando quella vecchia
+            if($project->image){
+                //se era presente la elimino dallo storage
+                Storage::disk('public')->delete('uploads/'. $project->image);
+            }
+            //prima di salvare il file prendo il nome del file per salvarlo nel db
+            $form_data_project['image_original_name'] = $request->file('image')->getClientOriginalName();
+            //salvo il file nello storage rinominandolo
+            $form_data_project['image']  = Storage::put('uploads',$form_data_project['image']);
+        }
 
      /*    $form_modifica_data['start_date'] = date('Y-m-d');
         $form_modifica_data['end_date'] = date('Y-m-d'); */
@@ -125,6 +144,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        //se il post contiene un immagine vuol dire che la devo eliminare
+        if($project->image){
+            Storage::disk('public')->delete($project->image);
+        }
         $project->delete();
 
         return redirect()->route('admin.projects.index')->with('deleted','Progetto Eliminato Correttamente');

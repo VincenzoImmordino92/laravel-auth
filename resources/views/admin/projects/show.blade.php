@@ -21,6 +21,12 @@
 
     <div class="container_custom">
         <h3 class="title text-decoration-underline">{{$project->title}}</h3>
+
+        <div class="w-50">
+            <img class="img-fluid" src="{{asset('storage/'.$project->image) }}" alt="{{$project->title}}">
+            <p>{{ $project->image_original_name }}</p>
+        </div>
+
         <p>Data di Inizio Progetto{{$project->start_date}}</p>
         <p>Data di Fine Progetto{{$project->end_date}}</p>
         <div class="description">

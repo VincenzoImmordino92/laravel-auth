@@ -15,7 +15,7 @@
 
     <div class="row">
         <div class="col-6">
-            <form  action="{{ $route }}" method="POST">
+            <form  action="{{ $route }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method( $method)
             <div class="my-2">
@@ -33,6 +33,29 @@
                 @error('title')
                     <p class="text-danger">{{$message}}</p>
                 @enderror
+            </div>
+
+            <div class="my-2">
+                <label for="image" class="form-label">Immagine</label>
+                <input
+                        type="file"
+                        class="form-control
+                        @error('image')
+                        is-invalid
+                        @enderror"
+                        id="image"
+                        name="image"
+                        value="{{old('image', $project?->image)}}">
+
+                @error('image')
+                    <p class="text-danger">{{$message}}</p>
+                @enderror
+                @if($project)
+                <img width="150" src="{{asset('storage/'. $project->image)}}" alt="">
+                @endif
+                {{-- <img width="150" src="/img/Placeholder.png" alt=""> --}}
+
+
             </div>
 
             <div class="my-2">
