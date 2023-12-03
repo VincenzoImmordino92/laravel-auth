@@ -39,6 +39,7 @@
                 <label for="image" class="form-label">Immagine</label>
                 <input
                         type="file"
+                        onchange="showImage(event)"
                         class="form-control
                         @error('image')
                         is-invalid
@@ -50,10 +51,8 @@
                 @error('image')
                     <p class="text-danger">{{$message}}</p>
                 @enderror
-                @if($project)
-                <img width="150" src="{{asset('storage/'. $project->image)}}" alt="">
-                @endif
-                {{-- <img width="150" src="/img/Placeholder.png" alt=""> --}}
+                {{-- in caso di errore del caricamento dell'immagine carico il placeholder --}}
+                <img id="thumb" width="150" onerror="this.src='/img/Placeholder.png'" src="{{ asset('storage/'. $project?->image) }}">
 
 
             </div>
@@ -133,5 +132,12 @@
         </div>
     </div>
 
+    <script>
+        function showImage(event){
+            const thumb = document.getElementById('thumb');
+            //associo a src l'immagine caricata
+            thumb.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
 
 @endsection

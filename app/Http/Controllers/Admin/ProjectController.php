@@ -121,12 +121,12 @@ class ProjectController extends Controller
         // se esiste la chiave image svuol dire che devo sostituire l'immagine presente (se c'è) eliminando quella vecchia
             if($project->image){
                 //se era presente la elimino dallo storage
-                Storage::disk('public')->delete('uploads/'. $project->image);
+                Storage::disk('public')->delete($project->image);
             }
             //prima di salvare il file prendo il nome del file per salvarlo nel db
-            $form_data_project['image_original_name'] = $request->file('image')->getClientOriginalName();
+            $form_modifica_data['image_original_name'] = $request->file('image')->getClientOriginalName();
             //salvo il file nello storage rinominandolo
-            $form_data_project['image']  = Storage::put('uploads',$form_data_project['image']);
+            $form_modifica_data['image']  = Storage::put('uploads',$form_modifica_data['image']);
         }
 
      /*    $form_modifica_data['start_date'] = date('Y-m-d');
